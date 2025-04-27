@@ -1,5 +1,5 @@
 kagglehub
 pandas
 scikit-learn
-flask
+streamlit
 matplotlib
