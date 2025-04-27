@@ -6,11 +6,11 @@ path = kagglehub.dataset_download("mahmoudelhemaly/students-grading-dataset")
 files = os.listdir(path)
 csv_files = [f for f in files if f.endswith('.csv')]
 
-def load_data():
+def load_data() -> pd.DataFrame:
     df = pd.read_csv(os.path.join(path, csv_files[0]))
     return filter_features(df)
 
-def filter_features(dataset: pd.DataFrame):
+def filter_features(dataset: pd.DataFrame) -> pd.DataFrame:
     selected_columns = [
         'Study_Hours_per_Week',           # hours studied
         'Attendance (%)',                 # attendance
