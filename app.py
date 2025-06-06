@@ -10,7 +10,6 @@ st.sidebar.markdown("""
 
 Identify which factors most significantly influence student academic performance using ML models and a public dataset.
 
-[Dataset on Kaggle](https://www.kaggle.com/datasets/mahmoudelhemaly/students-grading-dataset)
 """)
 
 # Feature selection
