@@ -27,10 +27,9 @@ def detect_outliers(dataset: pd.DataFrame) -> pd.DataFrame:
     Detect and visualize outliers using box plots and IQR method.
     Returns the dataset with outliers removed.
     """
-    # Keep only the numerical features (including encoded categorical features)
-    numerical_data = dataset[numerical_features].copy()
-    # Remove any columns that don't exist in the dataset
-    numerical_data = numerical_data[[col for col in numerical_data.columns if col in dataset.columns]]
+    # Keep only the numerical features that exist in the current dataset
+    available_features = [f for f in numerical_features if f in dataset.columns]
+    numerical_data = dataset[available_features].copy()
 
     # Using IQR method
     Q1 = numerical_data.quantile(0.25)
@@ -41,7 +40,6 @@ def detect_outliers(dataset: pd.DataFrame) -> pd.DataFrame:
     max_vals = numerical_data.max()
 
     # Plot each feature as a box plot
-    available_features = [f for f in numerical_features if f in numerical_data.columns]
     n_features = len(available_features)
     n_cols = 4
     n_rows = (n_features + n_cols - 1) // n_cols

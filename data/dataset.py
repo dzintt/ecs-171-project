@@ -14,9 +14,6 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
     """
     df = dataset.copy()
     
-    print("🔄 Encoding categorical features...")
-    print("=" * 50)
-    
     # Binary encodings (Yes/No -> 1/0)
     binary_mappings = {
         'Extracurricular_Activities': {'Yes': 1, 'No': 0},
@@ -27,7 +24,6 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
     for column, mapping in binary_mappings.items():
         if column in df.columns:
             df[column] = df[column].map(mapping)
-            print(f"✅ {column}: {mapping}")
     
     # Ordinal encodings (Low/Medium/High -> 1/2/3)
     ordinal_mappings = {
@@ -41,7 +37,6 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
     for column, mapping in ordinal_mappings.items():
         if column in df.columns:
             df[column] = df[column].map(mapping)
-            print(f"✅ {column}: {mapping}")
     
     # Custom ordinal encodings
     custom_mappings = {
@@ -56,16 +51,13 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
             available_values = df[column].dropna().unique()
             filtered_mapping = {k: v for k, v in mapping.items() if k in available_values}
             df[column] = df[column].map(filtered_mapping)
-            print(f"✅ {column}: {filtered_mapping}")
     
     # Binary categorical encodings
     if 'School_Type' in df.columns:
         df['School_Type'] = df['School_Type'].map({'Public': 0, 'Private': 1})
-        print(f"✅ School_Type: {{'Public': 0, 'Private': 1}}")
     
     if 'Gender' in df.columns:
         df['Gender'] = df['Gender'].map({'Male': 0, 'Female': 1})
-        print(f"✅ Gender: {{'Male': 0, 'Female': 1}}")
     
     # Count encoded features
     categorical_features = [
@@ -75,9 +67,7 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
         'Parental_Education_Level', 'Distance_from_Home', 'Gender'
     ]
     encoded_count = len([col for col in categorical_features if col in df.columns])
-    
-    print(f"\n📊 Total features encoded: {encoded_count}")
-    
+
     return df
 
 def show_dataset_summary(dataset: pd.DataFrame) -> None:
@@ -118,34 +108,12 @@ def load_data() -> pd.DataFrame:
         "lainguyn123/student-performance-factors",
         "StudentPerformanceFactors.csv",
     )
-    df = filter_features(df)
     df = encode_categorical_features(df)
     return df
 
-def filter_features(dataset: pd.DataFrame) -> pd.DataFrame:
-    selected_columns = [
-        'Hours_Studied',                  # hours studied per week
-        'Attendance',                     # attendance percentage
-        'Sleep_Hours',                    # sleep hours per night
-        'Extracurricular_Activities',     # extracurricular activities
-        'Parental_Involvement',           # parental involvement level
-        'Access_to_Resources',            # access to educational resources
-        'Previous_Scores',                # previous exam scores
-        'Motivation_Level',               # motivation level
-        'Internet_Access',                # internet access
-        'Tutoring_Sessions',              # tutoring sessions per month
-        'Family_Income',                  # family income level
-        'Teacher_Quality',                # teacher quality
-        'School_Type',                    # school type
-        'Peer_Influence',                 # peer influence
-        'Physical_Activity',              # physical activity hours
-        'Learning_Disabilities',          # learning disabilities
-        'Parental_Education_Level',       # parental education level
-        'Distance_from_Home',             # distance from home
-        'Gender',                         # gender
-        'Exam_Score'                      # final exam score
-    ]
-    return dataset[[col for col in selected_columns if col in dataset.columns]]
+def filter_features(dataset: pd.DataFrame, features_to_keep: list[str]) -> pd.DataFrame:
+    filtered_columns = [col for col in features_to_keep if col in dataset.columns]
+    return dataset[filtered_columns]
 
 def clean_null_values(dataset: pd.DataFrame) -> pd.DataFrame:
     original_rows = len(dataset)
@@ -154,33 +122,23 @@ def clean_null_values(dataset: pd.DataFrame) -> pd.DataFrame:
     
     if total_nulls == 0:
         return dataset
-    
-    print(f"📊 Found {total_nulls} null values across {(null_counts > 0).sum()} columns:")
+
     for column, null_count in null_counts.items():
         if null_count > 0:
             percentage = (null_count / original_rows) * 100
-            print(f"  • {column}: {null_count} nulls ({percentage:.2f}%)")
     
     rows_with_nulls = dataset.isnull().any(axis=1)
     rows_to_remove = rows_with_nulls.sum()
     
-    print(f"\n🗑️  Rows to be removed: {rows_to_remove} out of {original_rows} ({(rows_to_remove/original_rows)*100:.2f}%)")
-    
+
     cleaned_dataset = dataset.dropna()
     final_rows = len(cleaned_dataset)
     
-    print(f"\n✨ Cleaning completed!")
-    print(f"  • Original rows: {original_rows}")
-    print(f"  • Rows removed: {rows_to_remove}")
-    print(f"  • Final rows: {final_rows}")
-    print(f"  • Data retention: {(final_rows/original_rows)*100:.2f}%")
-    
-    # Verify cleaning
-    remaining_nulls = cleaned_dataset.isnull().sum().sum()
-    if remaining_nulls == 0:
-        print(f"  • ✅ All null values successfully removed!")
-    else:
-        print(f"  • ⚠️  Warning: {remaining_nulls} null values still remain!")
+    # print(f"\n✨ Cleaning completed!")
+    # print(f"  • Original rows: {original_rows}")
+    # print(f"  • Rows removed: {rows_to_remove}")
+    # print(f"  • Final rows: {final_rows}")
+    # print(f"  • Data retention: {(final_rows/original_rows)*100:.2f}%")
     
     return cleaned_dataset
 
@@ -213,11 +171,6 @@ def remove_outliers_simple(dataset: pd.DataFrame) -> pd.DataFrame:
     original_rows = len(dataset)
     final_rows = len(cleaned_dataset)
     removed_rows = original_rows - final_rows
-    
-    print(f"🧹 SIMPLE OUTLIER REMOVAL")
-    print(f"  • Original rows: {original_rows}")
-    print(f"  • Rows removed: {removed_rows}")
-    print(f"  • Final rows: {final_rows}")
-    print(f"  • Data retention: {(final_rows/original_rows)*100:.2f}%")
+
     
     return cleaned_dataset
