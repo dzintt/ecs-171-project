@@ -377,16 +377,43 @@ def main():
         
         st.markdown("### About This Project")
         st.markdown("""
-        Students are important in society as they will lead our future, solving problems and improving lives. As a result, education is an important part of their lives as it will shape their desired roles and help make them change the world. Student performance is used as a measure to evaluate and keep students on track to becoming bright contributors to society. In this project, we identify which factors most strongly impact academic outcomes so that we can help students improve their learning strategies in order to perform better academically.
+        Students are important in society as they will lead our future, solve problems and improve lives. As a result, education is important as it will shape their desired roles and help make them change the world. Student performance is used as a measure to evaluate and keep students on track to becoming bright contributors to society. In this project, we identify which factors most strongly impact academic outcomes so that we can help students improve their learning strategies in order to perform better academically.
+        
+        #### Dataset & Features
+        Our analysis uses a comprehensive dataset of **6,378 student records** with **7 key academic and lifestyle factors**:
         
         **Key Factors Analyzed:**
-        - Attendance percentage
-        - Hours studied per week
-        - Sleep hours per night
-        - Number of tutoring sessions
-        - Access to learning resources
-        - Extracurricular activities participation
-        - Teacher quality rating
+        - **Attendance (%)** - Class attendance percentage
+        - **Hours Studied** - Weekly study time commitment
+        - **Sleep Hours** - Daily sleep duration for cognitive health
+        - **Tutoring Sessions** - Additional academic support frequency
+        - **Access to Resources** - Learning material and technology availability
+        - **Extracurricular Activities** - Participation in non-academic activities
+        - **Teacher Quality** - Instructor effectiveness rating
+        
+        The target variable is **Exam Score (0-100)**, allowing us to predict academic performance based on these behavioral and environmental factors.
+                    
+        #### Our Machine Learning Approach
+        
+        **Multiple Model Comparison:** We implement and compare 6 different regression algorithms to find the best predictor:
+        - **Linear Regression** - Baseline linear relationship model
+        - **Ridge Regression** - L2 regularization to prevent overfitting
+        - **Lasso Regression** - L1 regularization with feature selection
+        - **Random Forest** - Ensemble method using multiple decision trees
+        - **Gradient Boosting** - Sequential boosting for improved accuracy
+        - **K-Nearest Neighbors (KNN)** - Instance-based learning approach
+        
+        **Validation Process:**
+        - **Cross-Validation:** Configurable K-fold validation (5, 10, 20, or 30 folds) for reliable performance estimation
+        - **Hyperparameter Tuning:** GridSearchCV optimization for each algorithm
+        - **Multiple Metrics:** Evaluation using R², RMSE, and MAE for comprehensive assessment
+        - **Train-Test Split:** 80/20 split with stratified sampling to ensure representative data distribution
+        
+        **Advanced Analytics:**
+        - **Model Diagnostics:** Training curves, actual vs predicted plots, and residual analysis
+        - **Performance Visualization:** Comprehensive charts comparing all models across multiple metrics
+        - **Feature Scaling:** StandardScaler normalization for optimal model performance
+        - **Interactive Predictions:** Real-time score prediction with confidence intervals
         """)
         
     else:
