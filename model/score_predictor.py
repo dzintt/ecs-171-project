@@ -60,7 +60,7 @@ class ScorePredictionModel:
             'Ridge Regression': {
                 'model': Ridge(),
                 'params': {
-                    'alpha': [0.1, 1.0, 10.0, 100.0]
+                    'alpha': [0.1, 10.0, 100.0]
                 }
             },
             'Lasso Regression': {
@@ -112,7 +112,6 @@ class ScorePredictionModel:
                     n_jobs=-1
                 )
                 grid_search.fit(X_train_scaled, y_train)
-                
                 best_model = grid_search.best_estimator_
                 best_params = grid_search.best_params_
                 cv_score = grid_search.best_score_
@@ -124,6 +123,13 @@ class ScorePredictionModel:
                 model.fit(X_train_scaled, y_train)
                 best_model = model
                 best_params = {}
+
+            if isinstance(best_model, RandomForestRegressor) or isinstance(best_model, GradientBoostingRegressor):
+                print("FEATURE IMPORTANCES", best_model.feature_importances_)
+            elif isinstance(best_model, KNeighborsRegressor):
+                pass
+            else:
+                print("COEFFICIENT", best_model.coef_)
             
             # Evaluate on test set
             y_pred = best_model.predict(X_test_scaled)
