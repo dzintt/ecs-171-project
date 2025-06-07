@@ -40,20 +40,9 @@ def clean_null_values(dataset: pd.DataFrame) -> pd.DataFrame:
     cleaned_dataset = dataset.dropna()
     final_rows = len(cleaned_dataset)
     
-    # print(f"\n✨ Cleaning completed!")
-    # print(f"  • Original rows: {original_rows}")
-    # print(f"  • Rows removed: {rows_to_remove}")
-    # print(f"  • Final rows: {final_rows}")
-    # print(f"  • Data retention: {(final_rows/original_rows)*100:.2f}%")
-    
     return cleaned_dataset
 
 def remove_outliers_simple(dataset: pd.DataFrame) -> pd.DataFrame:
-    """
-    Remove outliers using IQR method without visualization.
-    For visualization, use eda.detect_outliers() instead.
-    """
-    # All features after encoding (categorical values replaced with numerical ones)
     numerical_features = [
         'Hours_Studied', 'Attendance', 'Sleep_Hours', 'Previous_Scores', 
         'Tutoring_Sessions', 'Physical_Activity', 'Exam_Score',
@@ -82,12 +71,8 @@ def remove_outliers_simple(dataset: pd.DataFrame) -> pd.DataFrame:
     return cleaned_dataset
 
 def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
-    """
-    Convert categorical variables to numerical values by directly replacing the original values.
-    """
     df = dataset.copy()
     
-    # Binary encodings (Yes/No -> 1/0)
     binary_mappings = {
         'Extracurricular_Activities': {'Yes': 1, 'No': 0},
         'Internet_Access': {'Yes': 1, 'No': 0},
@@ -98,7 +83,6 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
         if column in df.columns:
             df[column] = df[column].map(mapping)
     
-    # Ordinal encodings (Low/Medium/High -> 1/2/3)
     ordinal_mappings = {
         'Parental_Involvement': {'Low': 1, 'Medium': 2, 'High': 3},
         'Access_to_Resources': {'Low': 1, 'Medium': 2, 'High': 3},
@@ -111,7 +95,6 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
         if column in df.columns:
             df[column] = df[column].map(mapping)
     
-    # Custom ordinal encodings
     custom_mappings = {
         'Parental_Education_Level': {'High School': 1, 'College': 2, 'Postgraduate': 3},
         'Distance_from_Home': {'Near': 1, 'Moderate': 2, 'Far': 3},
@@ -120,19 +103,16 @@ def encode_categorical_features(dataset: pd.DataFrame) -> pd.DataFrame:
     
     for column, mapping in custom_mappings.items():
         if column in df.columns:
-            # Handle missing values by checking available keys
             available_values = df[column].dropna().unique()
             filtered_mapping = {k: v for k, v in mapping.items() if k in available_values}
             df[column] = df[column].map(filtered_mapping)
     
-    # Binary categorical encodings
     if 'School_Type' in df.columns:
         df['School_Type'] = df['School_Type'].map({'Public': 0, 'Private': 1})
     
     if 'Gender' in df.columns:
         df['Gender'] = df['Gender'].map({'Male': 0, 'Female': 1})
     
-    # Count encoded features
     categorical_features = [
         'Extracurricular_Activities', 'Parental_Involvement', 'Access_to_Resources',
         'Motivation_Level', 'Internet_Access', 'Family_Income', 'Teacher_Quality',
