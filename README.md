@@ -250,5 +250,4 @@ This project is created for educational purposes as part of UC Davis ECS 171 cou
 
 ---
 
-**Team 23 - UC Davis ECS 171**  
-_Machine Learning for Predictive Analytics_
+**Team 23 - UC Davis ECS 171**
